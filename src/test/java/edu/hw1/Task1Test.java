@@ -16,7 +16,7 @@ class Task1Test {
     private Task1 task1;
 
     @Test
-    @DisplayName("Проверка, где минуты == 0")
+    @DisplayName("Проверка, где минуты == 0 ->")
     void check1() {
         // given
         String time = "00:23";
