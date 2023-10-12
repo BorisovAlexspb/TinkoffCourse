@@ -4,53 +4,51 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class Task6 {
-    int countStep = 0;
-    final int number4 = 4;
-    final int number3 = 3;
+
+    final int sizeofnumbers = 4;
+    final int degreemax = 3;
     final int number10 = 10;
-    final int number1000 = 1000;
-    final int number1111 = 1111;
-    final int number2222 = 2222;
-    final int number3333 = 3333;
-    final int number4444 = 4444;
-    final int number5555 = 5555;
-    final int number6666 = 6666;
-    final int number7777 = 7777;
-    final int number8888 = 8888;
-    final int number9999 = 9999;
-    final int number6174 = 6174;
+    final int maxvalue = 9999;
+    final int minvalue = 1000;
+    final int stoprecursion = 6174;
+    int numberForRecursion;
 
     public int kaprekara(int inputnumber) {
 
-        if (!(inputnumber > number1000 && inputnumber <= number9999)) {
+        if (!(inputnumber > minvalue && inputnumber <= maxvalue)) {
             return -1;
         }
 
-        boolean res = switch (inputnumber) {
-            case number1111, number2222, number3333, number4444, number5555,
-                 number6666, number7777, number8888, number9999 -> false;
-            default -> true;
-        };
-        if (!res) {
+        // check if input number contains the same numbers
+        char[] numberForCheck = String.valueOf(inputnumber).toCharArray();
+        boolean containsSameNumbers = true;
+        for (int i = 1; i < numberForCheck.length; i++) {
+            if (numberForCheck[i - 1] != numberForCheck[i]) {
+                containsSameNumbers = false;
+                break;
+            }
+        }
+        if (containsSameNumbers) {
             return -1;
         }
 
-        int number = inputnumber;
-        return recursive(number);
+        numberForRecursion = inputnumber;
+        int countStep = 0;
+        return recursive();
     }
 
-    private int recursive(int inputnumber) {
-        int number = inputnumber;
-        if (number == number6174) {
+    private int recursive() {
+        int countStep = 0;
+        if (numberForRecursion == stoprecursion) {
             return countStep;
         }
-        int size = number4;
-        Integer[] numberElAsc = new Integer[size]; // contains digits of ascending numbers
-        Integer[] numberElDesc = new Integer[size]; // contains digits of descending numbers
-        for (int i = 0; i < size; i++) {
-            numberElAsc[i] = (int) (number % number10);
-            numberElDesc[i] = (int) (number % number10);
-            number /= number10;
+
+        Integer[] numberElAsc = new Integer[sizeofnumbers]; // contains digits of ascending numbers
+        Integer[] numberElDesc = new Integer[sizeofnumbers]; // contains digits of descending numbers
+        for (int i = 0; i < sizeofnumbers; i++) {
+            numberElAsc[i] = (int) (numberForRecursion % number10);
+            numberElDesc[i] = (int) (numberForRecursion % number10);
+            numberForRecursion /= number10;
         }
         Arrays.sort(numberElDesc);
         Arrays.sort(numberElAsc, Collections.reverseOrder());
@@ -58,15 +56,15 @@ public class Task6 {
         int newNumberAsc = 0;
         int newNumberDesc = 0;
 
-        int degree = number3;
-        for (int j = 0; j < size; j++) {
+        int degree = degreemax;
+        for (int j = 0; j < sizeofnumbers; j++) {
             newNumberAsc += numberElAsc[j] * (int) Math.pow(number10, degree);
             newNumberDesc += numberElDesc[j] * (int) Math.pow(number10, degree);
             degree--;
         }
-        number = newNumberAsc - newNumberDesc;
+        numberForRecursion = newNumberAsc - newNumberDesc;
         countStep++;
-        recursive(number);
+        countStep += recursive();
         return countStep;
     }
 }

@@ -1,51 +1,37 @@
 package edu.hw1;
 
 public class Task8 {
-    final int number2 = 2;
-    final int normSize = 10;
-    final int maxSize = 12;
+    final int size = 8;
 
     public boolean knightBoardCapture(int[][] desc) {
-        // matrix 12 * 12
-        int[][] descMax = new int[][] {
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-        };
-        for (int i = number2; i < normSize; i++) {
-            for (int j = number2; j < normSize; j++) {
-                descMax[i][j] = desc[i - 2][j - 2];
-            }
-        }
-        //System.out.println("good");
-        for (int i = number2; i < normSize; i++) {
-            for (int j = number2; j < normSize; j++) {
-                if (descMax[i][j] == 1) {
-                    if (descMax[i - 1][j - 2] == 1
-                        || descMax[i + 1][j - 2] == 1
-                        || descMax[i - 2][j - 1] == 1
-                        || descMax[i + 2][j - 1] == 1
-                        || descMax[i - 2][j + 1] == 1
-                        || descMax[i + 2][j + 1] == 1
-                        || descMax[i - 1][j + 2] == 1
-                        || descMax[i + 1][j + 2] == 1
-                    ) {
-                        return false;
+        boolean check = true;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (desc[i][j] == 1) {
+                    if (i + 1 < size && j - 2 >= 0) {
+                        if (desc[i + 1][j - 2] == 1) {
+                            check = false;
+                        }
+                    }
+                    if (i + 2 < size && j - 1 >= 0) {
+                        if (desc[i + 2][j - 1] == 1) {
+                            check = false;
+                        }
+                    }
+                    if (i + 1 < size && j + 2 < size) {
+                        if (desc[i + 1][j + 2] == 1) {
+                            check = false;
+                        }
+                    }
+                    if (i + 2 < size && j + 1 < size) {
+                        if (desc[i + 2][j + 1] == 1) {
+                            check = false;
+                        }
                     }
                 }
             }
         }
-        return true;
-
+        return check;
     }
 
 }

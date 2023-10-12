@@ -75,4 +75,14 @@ class Task4Test {
         //then
         Assertions.assertThat(ans).isEqualTo("ba");
     }
+    @Test
+    @DisplayName("a -> a")
+    void check7() {
+        //given
+        String str = "a";
+        //when
+        String ans = task4.fixString(str);
+        //then
+        Assertions.assertThat(ans).isEqualTo("a");
+    }
 }

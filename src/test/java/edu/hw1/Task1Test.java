@@ -86,4 +86,26 @@ class Task1Test {
         // then
         Assertions.assertThat(ansString).isEqualTo("59999");
     }
+    @Test
+    @DisplayName("строка вида aa:66")
+    void check7() {
+        // given
+        String time = "aa:66";
+        // when
+        int ans = task1.problem(time);
+        String ansString = ans + "";
+        // then
+        Assertions.assertThat(ansString).isEqualTo("-1");
+    }
+    @Test
+    @DisplayName("строка вида :66")
+    void check8() {
+        // given
+        String time = ":66";
+        // when
+        int ans = task1.problem(time);
+        String ansString = ans + "";
+        // then
+        Assertions.assertThat(ansString).isEqualTo("-1");
+    }
 }

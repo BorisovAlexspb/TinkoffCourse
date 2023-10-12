@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Task5 {
 
     public boolean isPalindromeDescendant(long inputNumber) {
-        String numberStr = inputNumber + "";
+        String numberStr = String.valueOf(inputNumber);
         char[] numberChar = numberStr.toCharArray();
         int lengthOfList = numberChar.length;
 
@@ -15,10 +15,9 @@ public class Task5 {
             numberList.add(String.valueOf(numberChar[i]));
         }
 
-        if (isPalindrome(numberList) && lengthOfList > 1) {
+        /*if (isPalindrome(numberList) && lengthOfList > 1) {
             return true;
-        }
-
+        }*/
 
         while (lengthOfList >= 2) {
             if (isPalindrome(numberList)) {
@@ -35,9 +34,9 @@ public class Task5 {
                 numberList.add(parseStr);    // add to the end
 
             }
-
+            int currenttSizeofnumberList = numberList.size();
             numberList.subList(0, lengthOfList).clear();
-            lengthOfList /= 2;
+            lengthOfList = currenttSizeofnumberList - lengthOfList;
         }
         // check if last element is palindrome
         char[] newNumberChar = numberList.get(0).toCharArray();
