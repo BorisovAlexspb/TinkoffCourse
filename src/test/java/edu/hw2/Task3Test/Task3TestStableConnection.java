@@ -17,7 +17,7 @@ class Task3TestStableConnection {
     }
 
     @Test
-    void check1() {
+    void check() {
         PopularCommandExecutor pce = new PopularCommandExecutor();
         pce.updatePackages("StableConnection");
         String ans = outputStreamCaptor.toString().trim();

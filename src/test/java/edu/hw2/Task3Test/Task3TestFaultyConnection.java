@@ -16,7 +16,7 @@ public class Task3TestFaultyConnection {
     }
 
     @Test
-    void check1() {
+    void check() {
         PopularCommandExecutor pce = new PopularCommandExecutor();
         pce.updatePackages("FaultyConnection");
         String ans = outputStreamCaptor.toString().trim();
