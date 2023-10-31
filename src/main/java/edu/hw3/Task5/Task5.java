@@ -2,28 +2,29 @@ package edu.hw3.Task5;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class Task5 {
 
-    public ArrayList<Contacts> parseContacts(String[] fullNames, String sortOrder) {
+    public List<Contacts> parseContacts(String[] fullNames, String sortOrder) {
         if (fullNames == null) {
             return new ArrayList<Contacts>();
         }
 
-        ArrayList<Contacts> listOfNames = new ArrayList<>();
+        List<Contacts> listOfNames = new ArrayList<>();
         for (String c : fullNames) {
-            int valueOfSeparator = c.indexOf(" ");
-            if (valueOfSeparator != -1) {
-                listOfNames.add(new Contacts(c.substring(0, valueOfSeparator), c.substring(valueOfSeparator + 1)));
+            String[] words = c.split(" ");
+            if (words.length > 1) {
+                listOfNames.add(new Contacts(words[0], words[1]));
             } else {
-                listOfNames.add(new Contacts(c, ""));
+                listOfNames.add(new Contacts(words[0], ""));
             }
         }
 
         if (sortOrder.equals("ASC")) {
-            Collections.sort(listOfNames);
+            Collections.sort(listOfNames, new FullNameComparator(1));
         } else {
-            Collections.sort(listOfNames, Collections.reverseOrder());
+            Collections.sort(listOfNames, new FullNameComparator(-1));
         }
 
         return listOfNames;

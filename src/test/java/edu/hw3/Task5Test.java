@@ -28,7 +28,8 @@ class Task5Test {
     @Test
     void parseContactsCheckNotEmptyFullname() {
         var res =
-            task5.parseContacts(new String[] {"John Locke", "Thomas Aquinas", "David Hume", "Rene Descartes"}, "ASC");
+            task5.parseContacts(new String[] {"John Locke", "Thomas Aquinas", "David Hume", "Rene Descartes", "Affa", "Abba"}, "DESC");
+        System.out.println(res);
         Assertions.assertThat(res).isNotEmpty();
     }
 }

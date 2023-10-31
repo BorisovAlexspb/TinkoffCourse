@@ -31,4 +31,5 @@ public class StockQueue implements StockMarket {
     public String toString() {
         return "mostValuableStock is " + stockqueue.peek();
     }
+
 }
