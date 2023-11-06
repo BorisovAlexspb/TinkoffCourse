@@ -2,12 +2,10 @@ package edu.project2;
 
 import edu.project2.DFS.DeepFirstSearch;
 import edu.project2.Kruskal.Edge;
-import edu.project2.Kruskal.SortComparator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.Stack;
 
 @SuppressWarnings({"RegexpSinglelineJava", "ReturnCount"})
 public class Maze {
@@ -18,16 +16,15 @@ public class Maze {
     public static final int W = 8;
 
     public static final int DEFAULT_WIDTH = 10;
-    public static final int DEFAULT_HEIGHT = 5;
+    public static final int DEFAULT_HEIGHT = 10;
     public static final int NUMBER_TO_MAKE_NEW_COORDINATE = 20;
 
     protected Random random = null;
-    protected DeepFirstSearch dfs;
     protected Scanner sc;
+    protected List<Edge> adjlists = new ArrayList<>();
     protected int w = 0;
     protected int h = 0;
     protected int[][] grid = null;
-    protected List<Edge> adjLists = new ArrayList<>();
 
     // Define class methods
     public static int dx(int direction) {
@@ -84,7 +81,7 @@ public class Maze {
         initialize(w, h);
         random = new Random();
         sc = new Scanner(System.in);
-        dfs = new DeepFirstSearch(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        //searchGen = new SearchGenerator();
     }
 
     private void initialize(int w, int h) {
@@ -132,54 +129,42 @@ public class Maze {
         System.out.println(meta);
     }
 
-    public void findTheWay() {
-        System.out.println("Введите значения для марштрута");
-        System.out.print("Введите x1 , y1: ");
-        int x1 = sc.nextInt();
-        int y1 = sc.nextInt();
-        System.out.println();
-        System.out.print("Введите x2 , y2: ");
-        int x2 = sc.nextInt();
-        int y2 = sc.nextInt();
-        System.out.println();
-
-        adjLists.sort(new SortComparator());
-        Stack<Edge> colorWay = dfs.dfs(new Edge(x1, y1), new Edge(x2, y2), adjLists);
-        colorTheWay(colorWay);
+    public void findTheWay(Edge start, Edge end) {
+        List<Edge> colorWay = new DeepFirstSearch(w, h, adjlists).getShortWay(start, end);
+        drawTheWay(colorWay);
     }
 
-    public void colorTheWay(Stack<Edge> vertexToColor) {
-        final int NUMBER_TO_DRAW = 27;
-        // Draw the "top row" of the maze
-        System.out.print((char) NUMBER_TO_DRAW + "[H");
+    public void drawTheWay(List<Edge> vertexToColor) {
         System.out.print(" ");
         for (int i = 0; i < (w * 2) - 1; ++i) {
             System.out.print("_");
         }
         System.out.println("");
 
-        // Step through the grid/maze, cell-by-cell
         for (int y = 0; y < grid.length; ++y) {
             System.out.print("|");
             for (int x = 0; x < grid[0].length; ++x) {
-                // Start coloring, if unconnected
+                boolean check = false;
                 for (int i = 0; i < vertexToColor.size(); i++) {
                     if (vertexToColor.get(i).getX() == x && vertexToColor.get(i).getY() == y) {
-                        System.out.print((char) NUMBER_TO_DRAW + "[47m");
+                        check = true;
                     }
+                }
+                if (check) {
+                    System.out.print("#");
+                } else {
+                    System.out.print(((grid[y][x] & Maze.S) != 0) ? " " : "_");
+
                 }
 
-                System.out.print(((grid[y][x] & Maze.S) != 0) ? " " : "_");
                 if ((grid[y][x] & Maze.E) != 0) {
-                    System.out.print((((grid[y][x] | grid[y][x + 1]) & Maze.S) != 0) ? " " : "_");
+                    if (check) {
+                        System.out.print("#");
+                    } else {
+                        System.out.print((((grid[y][x] | grid[y][x + 1]) & Maze.S) != 0) ? " " : "_");
+                    }
                 } else {
                     System.out.print("|");
-                }
-                // Stop coloring, if unconnected
-                for (int i = 0; i < vertexToColor.size(); i++) {
-                    if (vertexToColor.get(i).getX() == x && vertexToColor.get(i).getY() == y) {
-                        System.out.print((char) NUMBER_TO_DRAW + "[m");
-                    }
                 }
             }
             System.out.println("");
@@ -188,5 +173,9 @@ public class Maze {
 
     public int[][] getGrid() {
         return grid;
+    }
+
+    public List<Edge> getAdjlists() {
+        return adjlists;
     }
 }

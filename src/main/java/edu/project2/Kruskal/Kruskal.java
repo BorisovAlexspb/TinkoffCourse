@@ -1,6 +1,5 @@
 package edu.project2.Kruskal;
 
-import edu.project2.DFS.DeepFirstSearch;
 import edu.project2.Maze;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,20 +10,17 @@ public class Kruskal extends Maze {
     // Define instance variables
     private List<List<Tree>> sets;
     private Stack<Edge> edges;
-    DeepFirstSearch dfs;
 
     //
     // Standard Constructors
     //
     public Kruskal() {
         //super();
-        dfs = new DeepFirstSearch(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         initialize();
     }
 
     public Kruskal(int w, int h) {
         super(w, h);
-        dfs = new DeepFirstSearch(w, h);
         initialize();
     }
 
@@ -67,7 +63,7 @@ public class Kruskal extends Maze {
         // Move to the upper left and defer to superclass.
         System.out.print((char) NUMBER_FOR_DRAW + "[H");
         super.draw();
-        findTheWay();
+        //findTheWay();
     }
 
     private void carvePassages() {
@@ -87,7 +83,8 @@ public class Kruskal extends Maze {
             if (!set1.connected(set2)) {
                 int coordinate1 = x * NUMBER_TO_MAKE_NEW_COORDINATE + y;
                 int coordinate2 = dx * NUMBER_TO_MAKE_NEW_COORDINATE + dy;
-                adjLists.add(new Edge(coordinate1, coordinate2));
+
+                adjlists.add(new Edge(coordinate1, coordinate2));
 
                 set1.connect(set2);
                 grid[y][x] |= direction;
@@ -106,7 +103,7 @@ public class Kruskal extends Maze {
         }
     }
 
-    public List<Edge> getAdjLists() {
-        return adjLists;
+    public void findTheWay(int x1, int y1, int x2, int y2) {
+        super.findTheWay(new Edge(x1, y1), new Edge(x2, y2));
     }
 }

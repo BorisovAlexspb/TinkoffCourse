@@ -1,9 +1,13 @@
 package edu.project2.Kruskal;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Edge {
     private int x;
     private int y;
     private int direction;
+    List<Edge> adjLists = new ArrayList<>();
 
     public Edge(int x, int y, int direction) {
         this.x = x;
@@ -26,5 +30,13 @@ public class Edge {
 
     public int getDirection() {
         return direction;
+    }
+
+    public void addEdge(Edge coordinate) {
+        adjLists.add(coordinate);
+    }
+
+    public List<Edge> getAdjLists() {
+        return adjLists;
     }
 }

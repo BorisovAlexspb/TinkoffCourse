@@ -8,7 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import java.util.List;
 import java.util.stream.Stream;
 
 public class MazeFindCorrectWayTest {
@@ -25,14 +24,12 @@ public class MazeFindCorrectWayTest {
     @MethodSource("provideWayInMaze")
     void checkWayTest(Kruskal kruskal, Edge start, Edge end) {
         //kruskal.draw();
+        var adjlists = kruskal.getAdjlists();
+        var res = new DeepFirstSearch(kruskal.w, kruskal.h,adjlists).getShortWay(start, end);
+        Assertions.assertThat(res.get(0).getX()).isEqualTo(start.getX());
+        Assertions.assertThat(res.get(0).getY()).isEqualTo(start.getY());
 
-        List<Edge> adjList = kruskal.getAdjLists();
-        var dfs = new DeepFirstSearch(kruskal.w, kruskal.h).dfs(start, end, adjList);
-
-        Assertions.assertThat(dfs.get(0).getX()).isEqualTo(start.getX());
-        Assertions.assertThat(dfs.get(0).getY()).isEqualTo(start.getY());
-
-        Assertions.assertThat(dfs.get(dfs.size() - 1).getX()).isEqualTo(end.getX());
-        Assertions.assertThat(dfs.get(dfs.size() - 1).getY()).isEqualTo(end.getY());
+        Assertions.assertThat(res.get(res.size() - 1).getX()).isEqualTo(end.getX());
+        Assertions.assertThat(res.get(res.size() - 1).getY()).isEqualTo(end.getY());
     }
 }
