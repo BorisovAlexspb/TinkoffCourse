@@ -106,8 +106,8 @@ public final class Tasks {
     }
 
     public static boolean task14(List<Animal> animals, int k) {
-        return !animals.stream()
-            .anyMatch(a -> a.type() == Animal.Type.DOG && a.height() > k);
+        return animals.stream()
+            .noneMatch(a -> a.type() == Animal.Type.DOG && a.height() > k);
     }
 
     public static Map<Animal.Type, Integer> task15(List<Animal> animals, int k, int l) {

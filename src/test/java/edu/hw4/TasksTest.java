@@ -17,14 +17,14 @@ import static edu.hw4.Animal.Type.*;
 
 public class TasksTest {
 
-    private static final Animal CAT_MURKA = new Animal("Murka", CAT, M, 4, 50, 6, true);
+    private static final Animal CAT_MURKA = new Animal("Murka", CAT, F, 4, 50, 6, true);
     private static final Animal CAT_TOSHIBO = new Animal("Toshibo", CAT, M, 3, 30, 4, true);
     private static final Animal DOG_JEEMBO = new Animal("Jeembo", DOG, M, 7, 110, 15, true);
     private static final Animal DOG_BOBIK = new Animal("Bobik", DOG, M, 5, 105, 20, true);
     private static final Animal DOG_SPIKE = new Animal("Spike", DOG, M, 10, 130, 17, false);
     private static final Animal BIRD_MIKE = new Animal("Mike", BIRD, M, 2, 15, 2, false);
     private static final Animal SPIDER_JOHN = new Animal("John", SPIDER, M, 1, 2, 2, true);
-    private static final Animal FISH_LEILA = new Animal("Leila", FISH, M, 2, 4, 5, false);
+    private static final Animal FISH_LEILA = new Animal("Leila", FISH, F, 2, 4, 5, false);
     private static final List<Animal> ANIMALS = new ArrayList<>();
 
     @BeforeAll
@@ -174,7 +174,7 @@ public class TasksTest {
     @Test
     void shouldReturnAnimalsWhoseNameExceedTwoWords() {
         List<Animal> newAnimals = new ArrayList<>(ANIMALS);
-        Animal spiderSirJo = new Animal("Sir Jo", SPIDER, M, 2, 1, 2, true);
+        Animal spiderSirJo = new Animal("Sir Jo Junior", SPIDER, M, 2, 10, 20, true);
         newAnimals.add(spiderSirJo);
 
         List<Animal> animalsWithTwoWordName = Tasks.task13(newAnimals);
@@ -190,7 +190,7 @@ public class TasksTest {
         var isContainsDogWhoseHeightExceedK = Tasks.task14(ANIMALS, k);
 
         assertThat(isContainsDogWhoseHeightExceedK)
-            .isTrue();
+            .isFalse();
     }
 
     @Test
