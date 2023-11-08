@@ -1,11 +1,14 @@
 package edu.hw4;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -35,15 +38,20 @@ public final class Tasks {
 
     public static Animal.Type task4(List<Animal> animals) {
         return animals.stream()
-            .sorted(Comparator.comparing((Animal a) -> a.name().length()).reversed())
-            .toList().stream().findFirst().get().type();
+            .max(Comparator.comparingInt(animal -> animal.name().length())).get().type();
     }
 
     public static Animal.Sex task5(List<Animal> animals) {
-        return Objects.requireNonNull(animals.stream()
-            .collect(Collectors.groupingBy(Animal::sex, Collectors.summingInt(a -> 1)))
-            .entrySet().stream()
-            .max(Comparator.comparingInt(Map.Entry::getValue)).orElse(null)).getKey();
+        Map<Animal.Sex, Integer> animalsAmountBySex = animals.stream()
+            .collect(Collectors.groupingBy(Animal::sex, Collectors.summingInt(a -> 1)));
+
+        Set<Integer> animalsAmount = new HashSet<>(animalsAmountBySex.values());
+        if (animalsAmount.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+
+        return animalsAmountBySex.entrySet().stream()
+            .max(Map.Entry.comparingByValue()).orElseThrow().getKey();
     }
 
     public static Map<Animal.Type, Animal> task6(List<Animal> animals) {
@@ -86,28 +94,32 @@ public final class Tasks {
     }
 
     public static Integer task12(List<Animal> animals) {
-        return animals.stream()
+        return (int) animals.stream()
             .filter(a -> a.weight() > a.height())
-            .toList().size();
+            .count();
     }
 
     public static List<Animal> task13(List<Animal> animals) {
         return animals.stream()
-            .filter(a -> a.name().split(" ").length > 1)
+            .filter(a -> a.name().split(" ").length > 2)
             .toList();
     }
 
     public static boolean task14(List<Animal> animals, int k) {
         return !animals.stream()
-            .filter(a -> a.type() == Animal.Type.DOG && a.height() > k)
-            .toList().isEmpty();
+            .anyMatch(a -> a.type() == Animal.Type.DOG && a.height() > k);
     }
 
-    public static Integer task15(List<Animal> animals, int k, int l) {
+    public static Map<Animal.Type, Integer> task15(List<Animal> animals, int k, int l) {
         return animals.stream()
-            .filter(a -> a.weight() > k && a.weight() < l)
-            .map(Animal::weight)
-            .reduce(Integer::sum).orElse(0);
+            .filter(a -> a.weight() >= k && a.weight() <= l)
+            .collect(
+                Collectors.groupingBy(
+                    Animal::type,
+                    () -> new EnumMap<>(Animal.Type.class),
+                    Collectors.summingInt(Animal::weight)
+                )
+            );
     }
 
     public static List<Animal> task16(List<Animal> animals) {
@@ -139,11 +151,10 @@ public final class Tasks {
     @SafeVarargs
     public static Animal task18(List<Animal>... animals) {
         return Arrays.stream(animals)
-            .map(l -> l.stream()
-                .filter(a -> a.type() == Animal.Type.FISH)
-                .max(Comparator.comparingInt(Animal::weight)).orElse(null))
-            .filter(Objects::nonNull)
-            .max(Comparator.comparingInt(Animal::weight)).orElse(null);
+            .flatMap(Collection::stream)
+            .filter(animal -> animal.type().equals(Animal.Type.FISH))
+            .max(Comparator.comparingInt(Animal::weight))
+            .orElse(null);
     }
 
     public static Map<String, Set<ValidationError>> task19(List<Animal> animals) {
