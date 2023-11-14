@@ -1,9 +1,7 @@
 package edu.hw5;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class Task6 {
+
     private Task6() {
 
     }
@@ -12,9 +10,15 @@ public class Task6 {
         if (subString == null || string == null) {
             throw new IllegalArgumentException("string can't be null");
         }
-
-        Pattern substringPattern = Pattern.compile(subString);
-        Matcher substringMatcher = substringPattern.matcher(string);
-        return substringMatcher.find();
+        char[] chars = subString.toCharArray();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(".*");
+        for (char c : chars) {
+            stringBuilder.append("[");
+            stringBuilder.append(c);
+            stringBuilder.append("]");
+            stringBuilder.append(".*");
+        }
+        return string.matches(stringBuilder.toString());
     }
 }

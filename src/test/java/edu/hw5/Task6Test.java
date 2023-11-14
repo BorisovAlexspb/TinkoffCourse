@@ -16,7 +16,8 @@ public class Task6Test {
             Arguments.of("TOKYO", "TORONTOTOKYO", true),
             Arguments.of("av", "java", true),
             Arguments.of("do you love me", "kiki", false),
-            Arguments.of("pyatigorsk", "pyatig", false)
+            Arguments.of("pyatigorsk", "pyatig", false),
+            Arguments.of("abc", "abdc", true)
         );
     }
 

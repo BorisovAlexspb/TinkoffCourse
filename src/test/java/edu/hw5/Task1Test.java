@@ -37,7 +37,7 @@ class Task1Test {
 
     @Test
     public void emptyArgumentTest() {
-        String res = task1.averageTimeSession();
-        Assertions.assertThat(res).isEqualTo("0H0M");
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> task1.averageTimeSession(""));
+        assertEquals("Illegal argument", exception.getMessage());
     }
 }

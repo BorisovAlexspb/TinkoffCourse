@@ -11,12 +11,10 @@ public class Task1 {
     private final static Pattern SESSION_PATTERN = Pattern.compile(
         "^(\\d{4}-\\d{2}-\\d{2}, \\d{2}:\\d{2}) - (\\d{4}-\\d{2}-\\d{2}, \\d{2}:\\d{2})$");
     private final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd, HH:mm");
-    private double secondsAverage = 0;
-    private final static int SECONDS_IN_ONE_HOUR = 3600;
-    private final static int MINUTE_IN_ONE_HOUR = 60;
+    private Duration secondsAverage = Duration.ZERO;
 
     public String averageTimeSession(String... strings) {
-        int size = strings.length;
+        long size = strings.length;
         for (String timeSession : strings) {
             Matcher matcher = SESSION_PATTERN.matcher(timeSession);
             if (!matcher.matches()) {
@@ -25,13 +23,10 @@ public class Task1 {
                 String[] timeSessionSplit = timeSession.split(" - ");
                 LocalDateTime start = LocalDateTime.parse(timeSessionSplit[0], DATE_FORMATTER);
                 LocalDateTime end = LocalDateTime.parse(timeSessionSplit[1], DATE_FORMATTER);
-                Duration duration = Duration.between(start, end);
-                secondsAverage += duration.getSeconds();
+                secondsAverage = secondsAverage.plus(Duration.between(start, end));
             }
         }
-        secondsAverage = secondsAverage / size;
-        int minute = (int) (secondsAverage % SECONDS_IN_ONE_HOUR / MINUTE_IN_ONE_HOUR);
-        int hours = (int) (secondsAverage / SECONDS_IN_ONE_HOUR);
-        return hours + "H" + minute + "M";
+        return secondsAverage.dividedBy(size).toHoursPart() + "H" + secondsAverage.dividedBy(size).toMinutesPart()
+            + "M";
     }
 }
