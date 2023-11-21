@@ -1,5 +1,6 @@
-package edu.hw6;
+package edu.hw6.task2;
 
+import edu.hw6.Task2;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
