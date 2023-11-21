@@ -3,12 +3,6 @@ package edu.project3.programFiles.parser;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 
-/**
- * Class provided by course.
- * Added getMonthDay() method to access date in appropriate format and
- * not to convert it to string every time I need it.
- */
-
 public class LogEntry {
     private String ipAddress;
     private LocalDateTime accessTime;

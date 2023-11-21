@@ -3,13 +3,11 @@ package edu.project3.programFiles;
 import edu.project3.programFiles.output.AdocOutputGenerator;
 import edu.project3.programFiles.output.MarkdownOutputGenerator;
 import edu.project3.programFiles.parser.LogEntry;
-import edu.project3.programFiles.parser.WebLogParser;
-import java.io.FileNotFoundException;
+import edu.project3.programFiles.parser.PathParser;
+import edu.project3.programFiles.receiver.HtttpReceiver;
+import edu.project3.programFiles.receiver.PathFileReceiver;
+import edu.project3.programFiles.receiver.Receiver;
 import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +16,7 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-/**
- * This class implements analysis of logs data in format specified in LogEntry class.
- * Allows to count unique IP addresses, visitors per day and so on.
- * Exercise to practice ArrayLists, HashMaps.
- * Educational Duke library for reading files replaced with the standard one.
- */
+import static edu.project3.programFiles.parser.WebLogParser.parseEntry;
 
 public class LogAnalyzer {
     private ArrayList<LogEntry> records;
@@ -47,22 +39,17 @@ public class LogAnalyzer {
 
     public void readFile() throws IOException {
 
+        Receiver receiver;
         Matcher matcher = URL_PATTERN.matcher(filePath);
-        if (matcher.matches()) {                         // if path is URL
-            filePath = new URL(filePath).getFile();
-        }
-
-        Path filePathInPath = Paths.get(filePath);
-        if (Files.exists(filePathInPath)) {
-            List<String> fileInString = Files.readAllLines(filePathInPath);
-            for (String line : fileInString) {
-                LogEntry temp = WebLogParser.parseEntry(line);
-                records.add(temp);
-            }
+        if (matcher.matches()) {
+            receiver = new HtttpReceiver(filePath);
         } else {
-            throw new FileNotFoundException(EXCEPTION_MESSAGE);
+            receiver = new PathFileReceiver(PathParser.getPaths(filePath));
         }
-
+        List<String> fileInString = receiver.receive();
+        for (String s : fileInString) {
+            records.add(parseEntry(s));
+        }
         var totalInfo = totalInfo(numberOfAllRequest(), averageServerResponseSize());
         switch (outputFormat) {
             case "markdown", "" -> new MarkdownOutputGenerator().generate(

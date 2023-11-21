@@ -8,7 +8,6 @@ import java.util.List;
 import static edu.project3.programFiles.parser.WebLogParser.parseOptionalArgumentDateFrom;
 import static edu.project3.programFiles.parser.WebLogParser.parseOptionalArgumentDateTo;
 
-
 @SuppressWarnings("UncommentedMain")
 public class Runner {
 

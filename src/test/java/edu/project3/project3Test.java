@@ -1,4 +1,4 @@
-package edu.project3.programFiles;
+package edu.project3;
 
 import edu.project3.programFiles.parser.WebLogParser;
 import org.assertj.core.api.Assertions;
@@ -32,4 +32,5 @@ class project3Test {
         Assertions.assertThat(res.getBytesReturned()).isEqualTo(0);
 
     }
+
 }
