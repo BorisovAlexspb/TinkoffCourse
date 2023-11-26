@@ -14,4 +14,3 @@ public class Task1 {
         return value.get();
     }
 }
-

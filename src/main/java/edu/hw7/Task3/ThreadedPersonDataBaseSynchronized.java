@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class ThreadedPersonDataBaseSynchronized implements PersonDatabase {
 
     private final Map<Integer, Person> idToPerson = new HashMap<>();
@@ -86,3 +87,4 @@ public class ThreadedPersonDataBaseSynchronized implements PersonDatabase {
         }
     }
 }
+

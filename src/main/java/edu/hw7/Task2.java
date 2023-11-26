@@ -5,6 +5,7 @@ import java.util.stream.LongStream;
 public class Task2 {
 
     private Task2() {
+
     }
 
     public static Long getFactorial(int n) {
