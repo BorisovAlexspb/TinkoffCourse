@@ -4,18 +4,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-
-public class ThreadedPersonDataBaseSynchronized implements PersonDatabase {
+public class ThreadedPersonDataBaseConcurrent implements PersonDatabase {
 
     private final Map<Integer, Person> idToPerson = new HashMap<>();
     private final Map<String, List<Person>> phoneNumberToPerson = new HashMap<>();
     private final Map<String, List<Person>> nameToPerson = new HashMap<>();
     private final Map<String, List<Person>> addressToPerson = new HashMap<>();
 
+    private final ReadWriteLock lock = new ReentrantReadWriteLock(true);
+
     @Override
-    public synchronized void add(Person person) {
-        synchronized (idToPerson) {
+    public void add(Person person) {
+        lock.writeLock().lock();
+        try {
             if (!idToPerson.containsKey(person.id())) {
 
                 //add phone number
@@ -42,13 +46,16 @@ public class ThreadedPersonDataBaseSynchronized implements PersonDatabase {
                 // add id - person
                 idToPerson.put(person.id(), person);
             }
+        } finally {
+            lock.writeLock().unlock();
         }
+
     }
 
     @Override
     public void delete(int id) {
-        //var newId = new AtomicInteger(id);
-        synchronized (idToPerson) {
+        lock.writeLock().lock();
+        try {
             Person person = idToPerson.get(id);
             if (person != null) {
                 // delete phone number
@@ -63,29 +70,39 @@ public class ThreadedPersonDataBaseSynchronized implements PersonDatabase {
                 // delete id and it's value (person)
                 idToPerson.remove(id);
             }
+        } finally {
+            lock.writeLock().unlock();
         }
     }
 
     @Override
-    public synchronized List<Person> findByName(String name) {
-        synchronized (nameToPerson) {
+    public List<Person> findByName(String name) {
+        lock.readLock().lock();
+        try {
             return nameToPerson.get(name);
+        } finally {
+            lock.readLock().unlock();
         }
+
     }
 
     @Override
-    public synchronized List<Person> findByAddress(String address) {
-        synchronized (addressToPerson) {
+    public List<Person> findByAddress(String address) {
+        lock.readLock().lock();
+        try {
             return addressToPerson.get(address);
+        } finally {
+            lock.readLock().unlock();
         }
     }
 
     @Override
-    public synchronized List<Person> findByPhone(String phone) {
-        synchronized (phoneNumberToPerson) {
+    public List<Person> findByPhone(String phone) {
+        lock.readLock().lock();
+        try {
             return phoneNumberToPerson.get(phone);
+        } finally {
+            lock.readLock().unlock();
         }
     }
-
 }
-
