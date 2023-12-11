@@ -17,13 +17,13 @@ public class Task2Test {
     @Test
     @DisplayName("file counter test")
     void fileCounterTest() {
-        File directory = new File("src/main/java/edu/hw9/Task1");
+        File directory = new File("src/main/java/edu/hw2/Task2");
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         FileCounter fileCounter = new FileCounter(directory, 2);
         List<File> files = forkJoinPool.invoke(fileCounter);
         Collections.sort(files);
         List<File> expected = new ArrayList(List.of(
-            new File("src/main/java/edu/hw9/Task1")
+            new File("src/main/java/edu/hw2/Task2")
         ));
         Collections.sort(expected);
         Assertions.assertEquals(expected,files);
@@ -32,13 +32,15 @@ public class Task2Test {
     @Test
     @DisplayName("file extensions searcher test")
     void fileExtensionsSearchTest() {
-        File directory = new File("src\\main\\java\\edu\\hw9\\Task1");
+        File directory = new File("src\\main\\java\\edu\\hw2\\Task2");
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         FileExtensionSearcher fileExtensionSearcher = new FileExtensionSearcher(directory, "java");
         List<File> files = forkJoinPool.invoke(fileExtensionSearcher);
         List<File> expected = new ArrayList(List.of(
-            new File("src/main/java/edu/hw9/Task1//Metric.java"),
-            new File("src\\main\\java\\edu\\hw9\\Task1\\StatisticCollector.java")
+            new File("src\\main\\java\\edu\\hw2\\Task2\\GetArea.java"),
+            new File("src/main/java/edu/hw2/Task2//Rectangle.java"),
+            new File("src\\main\\java\\edu\\hw2\\Task2\\Square.java"),
+            new File("src\\main\\java\\edu\\hw2\\Task2\\Task2.java")
         ));
         Collections.sort(expected);
         Assertions.assertEquals(expected,files);
@@ -47,14 +49,14 @@ public class Task2Test {
     @Test
     @DisplayName("file sizes searcher test")
     void fileSizeSearchTest() {
-        File directory = new File("src/main/java/edu/");
+        File directory = new File("src/main/java/edu/hw1/");
         ForkJoinPool forkJoinPool = new ForkJoinPool();
-        FileSizeSearcher fileSizeSearcher = new FileSizeSearcher(directory, 3000);
+        FileSizeSearcher fileSizeSearcher = new FileSizeSearcher(directory, 2000);
         List<File> files = forkJoinPool.invoke(fileSizeSearcher);
         Collections.sort(files);
         List<File> expected = new ArrayList<>(List.of(
-            new File("src\\main\\java\\edu\\project2\\Kruskal\\Kruskal.java"),
-            new File("src\\main\\java\\edu\\project2\\Maze.java")
+            new File("src\\main\\java\\edu\\hw1\\Task5.java"),
+            new File("src\\main\\java\\edu\\hw1\\Task6.java")
         ));
         Collections.sort(expected);
         Assertions.assertEquals(expected, files);
