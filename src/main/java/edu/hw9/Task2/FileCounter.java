@@ -30,7 +30,7 @@ public class FileCounter extends RecursiveTask<List<File>> {
                 }
             }
         }
-        if (counter > amount) {
+        if (counter >= amount) {
             fitAmountDirectories.add(directory);
         }
         return fitAmountDirectories;

@@ -49,7 +49,7 @@ public class DeepFirstSearchParallel extends Search {
             List<Edge> neighbours = getNeighbours(x, y);
 
             for (Edge neighbour : neighbours) {
-                if (!isVisited[y][x]) {
+                if (!isVisited[neighbour.getY()][neighbour.getX()]) {
                     ParallelDfsSolver task = new ParallelDfsSolver(neighbour, end);
                     task.fork();
                     forks.add(task);
