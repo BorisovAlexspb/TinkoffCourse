@@ -1,5 +1,7 @@
 package edu.hw6.Task3;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystems;
@@ -10,7 +12,7 @@ import java.util.regex.Pattern;
 
 public interface AbstractFilter extends DirectoryStream.Filter<Path> {
     @Override
-    boolean accept(Path entry);
+    boolean accept(Path entry) throws FileNotFoundException;
 
     default AbstractFilter and(AbstractFilter additionalFilter) {
         return entry -> this.accept(entry) && additionalFilter.accept(entry);
@@ -28,20 +30,20 @@ public interface AbstractFilter extends DirectoryStream.Filter<Path> {
 
     static AbstractFilter magicNumber(int... magicBytes) {
         return entry -> {
-            try {
-                byte[] buffer = Files.readAllBytes(entry);
-                if (buffer.length >= magicBytes.length) {
-                    for (int i = 0; i < magicBytes.length; i++) {
-                        if ((byte) magicBytes[i] != buffer[i]) {
-                            return false;
-                        }
+            try (FileInputStream inputStream = new FileInputStream(String.valueOf(entry))) {
+                for (int b : magicBytes) {
+                    if (inputStream.available() == 0) {
+                        return false;
                     }
-                    return true;
+
+                    if (inputStream.read() != b) {
+                        return false;
+                    }
                 }
-                return false;
             } catch (IOException e) {
-                return false;
+                throw new RuntimeException("error while check magic number");
             }
+            return true;
         };
     }
 

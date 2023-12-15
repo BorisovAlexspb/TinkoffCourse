@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +16,7 @@ public class Task1 implements Map<String, String> {
     private final Map<String, String> diskMap = new HashMap<>();
 
     public void loadFromFile(String fileName) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName, StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] keyValue = line.split(":");
@@ -28,7 +29,7 @@ public class Task1 implements Map<String, String> {
 
     public void saveToFile(String fileName) {
         StringBuilder sb = new StringBuilder();
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, StandardCharsets.UTF_8))) {
             for (var entry : diskMap.entrySet()) {
                 sb.append(entry.getKey())
                     .append(":")
@@ -37,7 +38,7 @@ public class Task1 implements Map<String, String> {
             }
             writer.write(sb.toString());
         } catch (IOException e) {
-            throw new RuntimeException();
+            throw new RuntimeException("error, while save to file");
         }
     }
 

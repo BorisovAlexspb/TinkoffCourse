@@ -14,7 +14,7 @@ public class Task5 {
     private static final String MESSAGE_ENDPOINT = "https://hacker-news.firebaseio.com/v0/item/";
     private static final Pattern TITLE_PATTERN = Pattern.compile("\"title\":\"([^\"]+)\"");
     private HttpClient client;
-    private HttpResponse<String> response;
+    //private HttpResponse<String> response;
 
     public Task5(HttpClient client) {
         this.client = client;
@@ -22,7 +22,7 @@ public class Task5 {
 
     public Task5(HttpClient client, HttpResponse<String> response) {
         this.client = client;
-        this.response = response;
+        /*this.response = response;*/
     }
 
     public long[] hackerNewsTopStories() {
@@ -44,7 +44,7 @@ public class Task5 {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(uri))
                 .GET().build();
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return response.body();
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
