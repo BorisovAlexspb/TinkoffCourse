@@ -1,6 +1,5 @@
 package edu.hw8;
 
-
 import edu.hw8.Task2.FibonacciCalculator;
 import edu.hw8.Task2.FixedThreadPool;
 import org.junit.jupiter.api.Assertions;
@@ -16,7 +15,7 @@ public class Task2Test {
     @DisplayName("fixed thread pool test with fibonacci calculator")
     void FibonacciFixedThreadPoolTest() {
         int threads = 8;
-        try (FixedThreadPool fixedThreadPool = new FixedThreadPool(threads)) {
+        try (FixedThreadPool fixedThreadPool = FixedThreadPool.create(threads)) {
             fixedThreadPool.start();
             for (int i = 1; i < 6; i++) {
                 int finalI = i;

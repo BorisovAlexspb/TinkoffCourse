@@ -4,14 +4,22 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
-@SuppressWarnings("InnerAssignment")
+@SuppressWarnings({"InnerAssignment", "MagicNumber"})
 public class MonoThreadClientHandler implements Runnable {
 
-    private static Socket client;
+    private final Socket client;
+    private final static Map<String, String> ANSWERS = new HashMap<>(Map.of(
+        "личности", "Не переходи на личности там, где их нет",
+        "оскорбления", "Если твои противники перешли на личные оскорбления, будь уверена — твоя победа не за горами",
+        "глупый", "А я тебе говорил, что ты глупый? Так вот, я забираю свои слова обратно... Ты просто бог идиотизма",
+        "интеллект", "Чем ниже интеллект, тем громче оскорбления"
+    ));
 
     public MonoThreadClientHandler(Socket client) {
-        MonoThreadClientHandler.client = client;
+        this.client = client;
     }
 
     @Override
@@ -19,32 +27,31 @@ public class MonoThreadClientHandler implements Runnable {
         try {
             DataOutputStream out = new DataOutputStream(client.getOutputStream());
             DataInputStream in = new DataInputStream(client.getInputStream());
+            // System.out.println("Server reading from channel");
 
-           // System.out.println("Server reading from channel");
+            while (!client.isClosed()) {
+                String inputMessage;
+                try {
+                    inputMessage = in.readUTF();
+                } catch (IOException e) {
+                    break;
+                }
 
-            String inputMessage = in.readUTF();
-
-            String backMessage;
-            switch (inputMessage) {
-                case "личности" -> backMessage = "Не переходи на личности там, где их нет";
-                case "оскорбления" -> backMessage =
-                    "Если твои противники перешли на личные оскорбления, будь уверена — твоя победа не за горами";
-                case "глупый" -> backMessage =
-                    "А я тебе говорил, что ты глупый? Так вот, я забираю свои слова обратно... Ты просто бог идиотизма";
-                case "интеллект" -> backMessage = "Чем ниже интеллект, тем громче оскорбления";
-                default -> backMessage = "Что ты сказал? Повтори";
+                out.writeUTF(handleMessage(inputMessage));
+                out.flush();
+                Thread.sleep(10);
             }
-            out.writeUTF(backMessage);
-            out.flush();
-
             in.close();
             out.close();
             client.close();
 
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.getMessage();
         }
 
     }
 
+    private String handleMessage(String clientMessage) {
+        return ANSWERS.getOrDefault(clientMessage, "Что ты сказал? Повтори");
+    }
 }

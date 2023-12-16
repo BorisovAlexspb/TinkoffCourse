@@ -2,42 +2,42 @@ package edu.hw8.Task1.Server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@SuppressWarnings({"HideUtilityClassConstructor", "UncommentedMain"})
+@SuppressWarnings({"HideUtilityClassConstructor", "UncommentedMain", "MagicNumber"})
 public class MultiThreadServer {
 
-    static ExecutorService executeIt = Executors.newFixedThreadPool(2);
+    static ExecutorService executeIt = Executors.newFixedThreadPool(4);
     private static final int PORT = 3345;
-    private static final int NUMBER_OF_THREADS = 10;
-    private static final int WAITING_TIME = 5000;
+    private static final int WAITING_TIME = 3000;
+    ServerSocket server;
 
-    public static void main(String[] args) {
+    public void start() {
 
-        try (ServerSocket server = new ServerSocket(PORT)) {
-            //System.out.println("Server socket created, command console reader for listen to server commands");
+        try {
+            server = new ServerSocket(PORT);
             server.setSoTimeout(WAITING_TIME);
-            int count = 0;
-
-            while (!server.isClosed()) {
-                count++;
-                if (count > NUMBER_OF_THREADS) {
-                    server.close();
-                    break;
-                }
-
-                Socket client = server.accept();
-
-                executeIt.execute(new MonoThreadClientHandler(client));
-                //System.out.println("Connection accepted");
+            Thread.sleep(2000);
+            while (true) {
+                executeIt.execute(new MonoThreadClientHandler(server.accept()));
             }
 
-            executeIt.shutdown();
-        } catch (IOException e) {
-            e.getMessage();
+        } catch (SocketTimeoutException e) {
+            close();
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
         }
 
+    }
+
+    public void close() {
+        executeIt.shutdown();
+        try {
+            server.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
