@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 @SuppressWarnings({"HideUtilityClassConstructor", "UncommentedMain", "MagicNumber"})
 public class MultiThreadServer {
 
-    static ExecutorService executeIt = Executors.newFixedThreadPool(4);
+    ExecutorService executeIt = Executors.newFixedThreadPool(4);
     private static final int PORT = 3345;
     private static final int WAITING_TIME = 3000;
     ServerSocket server;

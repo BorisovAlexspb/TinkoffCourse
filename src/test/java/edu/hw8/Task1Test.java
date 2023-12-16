@@ -21,7 +21,7 @@ public class Task1Test {
         MultiThreadServer server = new MultiThreadServer();
         Thread serverThread = new Thread(server::start);
         serverThread.start();
-        //Thread.sleep(2000);
+        Thread.sleep(2000);
         MultiClients firstClient = new MultiClients();
         firstClient.start();
         Assertions.assertEquals(firstClient.sendMessage("личности"), "Не переходи на личности там, где их нет");
@@ -36,7 +36,7 @@ public class Task1Test {
         Assertions.assertEquals(firstClient.sendMessage("интеллект"), "Чем ниже интеллект, тем громче оскорбления");
         Assertions.assertEquals(firstClient.sendMessage("дурак"), "Что ты сказал? Повтори");
         firstClient.close();
-        //Thread.sleep(2000);
+        Thread.sleep(2000);
         serverThread.join();
     }
 
